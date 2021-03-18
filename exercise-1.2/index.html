@@ -23,6 +23,10 @@
         height: 200px;
     }
    
+    .loader {
+        font-size: 24px;
+    }
+
 </style>
 <body>
 <ul class="product-list" id="product-list">
@@ -67,6 +71,7 @@
         const productsListItems = createProductItems(images, 0, 5);
         // console.log(productsListItems)
         productsList.insertAdjacentHTML('beforeend', productsListItems);
+        productsList.insertAdjacentHTML('afterend', `<p class="loader">Loading</p>`);
 
        const options = {
            root: null,
@@ -80,17 +85,13 @@
                 const startPosition = document.querySelectorAll(".product-list .product-list-item").length;
                 const newProductItems = createProductItems(images, startPosition, 5);
                 productsList.insertAdjacentHTML('beforeend', newProductItems);
-                observer.unobserve(observeElement.target);
-                const lastProductItem = document.querySelector('.product-list li:last-child');
-                observer.observe(lastProductItem);
             }
        }
 
        const observer = new IntersectionObserver(intersectionCallback, options);
 
-       const observedItem = document.querySelector('.product-list li:last-child');
-    //    console.log(observedItem);
-       observer.observe(observedItem);
+       const loader = document.querySelector(".loader");
+       observer.observe(loader);
 
    }
 </script>

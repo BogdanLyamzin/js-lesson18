@@ -16,11 +16,12 @@
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
+        margin-bottom: 10px;
     }
 </style>
 <body>
-<ul class="lazy-img-list">
-    <li class="lazy-img">1</li>
+<ul class="lazy-img-list" id="lazy-img-list">
+    <!-- <li class="lazy-img">1</li>
     <li class="lazy-img">2</li>
     <li class="lazy-img">3</li>
     <li class="lazy-img">4</li>
@@ -34,7 +35,7 @@
     <li class="lazy-img">12</li>
     <li class="lazy-img">13</li>
     <li class="lazy-img">14</li>
-    <li class="lazy-img">15</li>
+    <li class="lazy-img">15</li> -->
 </ul>
 <script>
     // ждем полной загрузки страницы
@@ -44,7 +45,7 @@
             "./images/1.jpg",
             "./images/2.jpg",
             "./images/3.jpg",
-            "/images/4.jpg",
+            "./images/4.jpg",
             "./images/5.jpg",
             "./images/6.jpg",
             "./images/7.jpg",
@@ -58,6 +59,9 @@
             "./images/15.jpg",
         ]
 
+        const lazyImgElemnts = images.map(item => `<li class="lazy-img"></li>`).join("")
+        const lazyImgList = document.getElementById("lazy-img-list");
+        lazyImgList.insertAdjacentHTML("beforeend", lazyImgElemnts);
         // устанавливаем настройки
         const options = {
             // родитель целевого элемента - область просмотра
@@ -65,23 +69,20 @@
             // без отступов
             rootMargin: '0px',
             // процент пересечения - половина изображения
-            threshold: 0.5
+            threshold: 0.3
         };
 
         const intersectionCallback = (entries, observer) => {
-            console.log(entries)
-            // etries[0]
             // для каждой записи-целевого элемента
             entries.forEach((entry, index) => {
-                const lazyImg = entry.target
+                // const lazyImg = entry.target
+                // console.log(entry)
                 // если элемент является наблюдаемым
                 if (entry.isIntersecting) {
                     // меняем фон контейнера
-                    lazyImg.style.backgroundImage = `url('${images[index]}')`;
-                } else {
-                    lazyImg.style.backgroundImage = "";
-                }
-            })
+                    entry.target.style.backgroundImage = `url('${images[index]}')`;
+                } 
+            });
         };
 
         // создаем наблюдатель
