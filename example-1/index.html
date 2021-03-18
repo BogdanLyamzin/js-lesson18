@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .lazy-img-list {
+        list-style: none;
+    }
+
+    .lazy-img {
+        width: 200px;
+        height: 200px;
+        border: 1px solid black;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+<body>
+<ul class="lazy-img-list">
+    <li class="lazy-img">1</li>
+    <li class="lazy-img">2</li>
+    <li class="lazy-img">3</li>
+    <li class="lazy-img">4</li>
+    <li class="lazy-img">5</li>
+    <li class="lazy-img">6</li>
+    <li class="lazy-img">7</li>
+    <li class="lazy-img">8</li>
+    <li class="lazy-img">9</li>
+    <li class="lazy-img">10</li>
+    <li class="lazy-img">11</li>
+    <li class="lazy-img">12</li>
+    <li class="lazy-img">13</li>
+    <li class="lazy-img">14</li>
+    <li class="lazy-img">15</li>
+</ul>
+<script>
+    // ждем полной загрузки страницы
+    window.onload = () => {
+
+        const images = [
+            "./images/1.jpg",
+            "./images/2.jpg",
+            "./images/3.jpg",
+            "/images/4.jpg",
+            "./images/5.jpg",
+            "./images/6.jpg",
+            "./images/7.jpg",
+            "./images/8.jpg",
+            "./images/9.jpg",
+            "./images/10.jpg",
+            "./images/11.jpg",
+            "./images/12.jpg",
+            "./images/13.jpg",
+            "./images/14.jpg",
+            "./images/15.jpg",
+        ]
+
+        // устанавливаем настройки
+        const options = {
+            // родитель целевого элемента - область просмотра
+            root: null,
+            // без отступов
+            rootMargin: '0px',
+            // процент пересечения - половина изображения
+            threshold: 0.5
+        };
+
+        const intersectionCallback = (entries, observer) => {
+            console.log(entries)
+            // etries[0]
+            // для каждой записи-целевого элемента
+            entries.forEach((entry, index) => {
+                const lazyImg = entry.target
+                // если элемент является наблюдаемым
+                if (entry.isIntersecting) {
+                    // меняем фон контейнера
+                    lazyImg.style.backgroundImage = `url('${images[index]}')`;
+                } else {
+                    lazyImg.style.backgroundImage = "";
+                }
+            })
+        };
+
+        // создаем наблюдатель
+        const observer = new IntersectionObserver(intersectionCallback, options);
+
+        // с помощью цикла следим за всеми img на странице
+        const arr = document.querySelectorAll('.lazy-img')
+        arr.forEach(img => {
+            observer.observe(img)
+        })
+    }
+</script>
+</body>
+</html>
